@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="site.css" type="text/css" />
+    <link rel="stylesheet" href="order.css" type="text/css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashutosh's Pie Shop</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="pies.html">Pies</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside>
+            <img src="images/logo.png" alt="Ashutosh's Pie Shop" />
+        </aside>
+        <article>
+            <h1>Order</h1>
+            <div class="pies">
+                <img src="" />
+                <div class="columns">
+                    <div class="title"></div>
+                    <div class="price"></div>
+                </div>
+                <p class="desc"></p>
+            </div>
+            <form action="http://localhost:808/api/post" method="post">
+                <input type="hidden" id="pie-order"/>
+                <input type="hidden" id="location">
+                <div class="input-group">
+                    <div><label for="first-name">First Name</label></div>
+                    <div><input type="text" id="first-name" name="first-name" /></div>
+                </div>
+                <div class="input-group">
+                    <div><label for="last-name">Last Name</label></div>
+                    <div><input type="text" id="last-name" name="last-name" /></div>
+                </div>
+                <div class="input-group">
+                    <div><label for="address">Address</label></div>
+                    <div><input type="text" id="address" name="address" /></div>
+                </div>
+                <div class="input-group">
+                    <div><label for="state">State</label></div>
+                    <div>
+                        <select name="state" id="state">
+                            <option value="" selected>[Select a state]</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Kanpur">Kanpur</option>
+                            <option value="Lucknow">Lucknow</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div><label for="postal-code">Postal Code</label></div>
+                    <div><input type="text" id="postal-code" name="postal-code" /></div>
+                </div>
+                <div class="input-group">
+                    <div><label for="comments">Comments</label></div>
+                    <div>
+                        <textarea name="comments" id="comments" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+                <input type="reset" value="Reset" />
+                <input type="submit" value="Order" />
+            </form>
+        </article>
+    </main>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="pies.html">Pies</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </footer>
+</body>
+<script>
+    window.addEventListener("DOMContentLoaded", function (e) {
+
+        let locationBox = document.querySelector('#location');
+        let location = {
+            latitude: "unknown",
+            longitude: "unknown"
+        };
+        window.navigator.geolocation.getCurrentPosition(
+            function(postion) {
+                location = {
+                    latitude: postion.coords.latitude,
+                    longitude: postion.coords.longitude
+                };
+                locationBox.value = JSON.stringify(location);
+            },
+            function(error) {
+                locationBox.value = JSON.stringify(location);
+            }
+        );
+        const order = localStorage.getItem("order");
+        if (order) {
+            const pieOrder = JSON.parse(order);
+            
+            const orderInput = document.querySelector('#pie-order');
+            orderInput.value = order;
+
+            const pies = document.querySelector('.pies');
+            const price = pies.querySelector('.price');
+            const title = pies.querySelector('.title');
+            const desc = pies.querySelector('.desc');
+
+            price.innerText = pieOrder.price;
+            title.innerText = pieOrder.title;
+            desc.innerText = pieOrder.desc;
+
+            const img = pies.querySelector('img');
+            img.setAttribute("src", `images/${pieOrder.id}.png`);
+            img.setAttribute("alt", pieOrder.title);
+        }
+    });
+</script>
+
+</html>
