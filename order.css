@@ -11,6 +11,19 @@
     width: 100%;
 }
 
+.input-group input:valid {
+    border-color: green;
+}
+
+.input-group input:invalid {
+    border-color: red;
+}
+
+.input-group input:focus:invalid,
+.input-group input:focus:valid {
+    border-color: black;
+}
+
 label {
     font-weight: 600;
 }
